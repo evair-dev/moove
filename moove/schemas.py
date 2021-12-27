@@ -1,6 +1,26 @@
 from pydantic import BaseModel
+from typing import List, Optional
 
 
+# For List
+class ListBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+
+
+class ListCreate(ListBase):
+    pass
+
+
+class UserList(ListBase):
+    id: int
+    owner_id: int
+
+    class Config:
+        orm_mode = True
+
+
+# For User
 class UserBase(BaseModel):
     email: str
 
@@ -22,6 +42,7 @@ class User(UserBase):
     id: int
     full_name: str
     photo_path: str
+    lists: List[UserList] = []
 
     class Config:
         orm_mode = True

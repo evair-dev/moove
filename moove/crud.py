@@ -54,3 +54,11 @@ def commit_change_in_db_user(db: Session, db_user: schemas.User):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def create_user_item(db: Session, user_list: schemas.ListCreate, user_id: int):
+    db_item = models.UserList(**user_list.dict(), owner_id=user_id)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item

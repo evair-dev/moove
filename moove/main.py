@@ -64,3 +64,12 @@ def upload_photo(user_id: int, db: Session = Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return crud.delete_user_photo(db=db, user_id=user_id)
+
+
+@app.post("/users/{user_id}/items/", response_model=schemas.UserList)
+def create_list_for_user(
+    user_id: int, item: schemas.ListCreate, db: Session = Depends(get_db)
+):
+    return crud.create_user_item(db=db, user_list=item, user_id=user_id)
+
+
