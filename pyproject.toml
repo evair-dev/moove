@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "moove"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.70.1"
+SQLAlchemy = "^1.4.29"
+uvicorn = {extras = ["standar"], version = "^0.16.0"}
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+psycopg2-binary = "^2.9.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
