@@ -43,10 +43,24 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @app.patch("/users/{user_id}", response_model=schemas.User)
-def create_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(get_db)):
+def update_user(user_id: int, user: schemas.UserUpdate, db: Session = Depends(get_db)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return crud.update_user(db=db, user=user, user_id=user_id)
 
 
+@app.patch("/users/{user_id}/photo", response_model=schemas.User)
+def upload_photo(user_id: int, user: schemas.UserPhoto, db: Session = Depends(get_db)):
+    db_user = crud.get_user(db, user_id=user_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return crud.upload_user_photo(db=db, user=user, user_id=user_id)
+
+
+@app.delete("/users/{user_id}/photo", response_model=schemas.User)
+def upload_photo(user_id: int, db: Session = Depends(get_db)):
+    db_user = crud.get_user(db, user_id=user_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return crud.delete_user_photo(db=db, user_id=user_id)

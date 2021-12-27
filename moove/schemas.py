@@ -14,6 +14,10 @@ class UserUpdate(UserBase):
     full_name: str
 
 
+class UserPhoto(BaseModel):
+    photo_path: str
+
+
 class User(UserBase):
     id: int
     full_name: str

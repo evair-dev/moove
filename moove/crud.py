@@ -26,11 +26,30 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 
 def update_user(db: Session, user: schemas.UserUpdate, user_id: int):
-    db_user = db.query(models.User).filter(models.User.id == user_id).first()
+    db_user = get_user(db, user_id)
     user_data = user.dict(exclude_unset=True)
     for key, value in user_data.items():
         setattr(db_user, key, value)
 
+    return commit_change_in_db_user(db, db_user)
+
+
+def upload_user_photo(db: Session, user: schemas.UserPhoto, user_id: int):
+    db_user = get_user(db, user_id)
+    user_data = user.dict(exclude_unset=True)
+    setattr(db_user, "photo_path", user_data["photo_path"])
+
+    return commit_change_in_db_user(db, db_user)
+
+
+def delete_user_photo(db: Session, user_id: int):
+    db_user = get_user(db, user_id)
+    setattr(db_user, "photo_path", "Not found")
+
+    return commit_change_in_db_user(db, db_user)
+
+
+def commit_change_in_db_user(db: Session, db_user: schemas.User):
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
