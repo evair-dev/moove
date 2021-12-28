@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, ForeignKey
+from sqlalchemy import Boolean, Date, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -26,3 +26,32 @@ class UserList(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="lists")
+    movies = relationship('Movie', secondary='movie_user_list')
+
+
+class Movie(Base):
+    __tablename__ = "movies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, index=True)
+    tagline = Column(String)
+    overview = Column(String)
+    release_date = Column(Date)
+    poster_url = Column(String)
+    backdrop_url = Column(String)
+    imdb_id = Column(String)
+
+    user_lists = relationship('UserList', secondary='movie_user_list')
+
+
+class MovieUserList(Base):
+    __tablename__ = 'movie_user_list'
+
+    user_lists_id = Column(
+      Integer,
+      ForeignKey('user_lists.id'),
+      primary_key=True)
+    movies_id = Column(
+        Integer,
+        ForeignKey('movies.id'),
+        primary_key=True)

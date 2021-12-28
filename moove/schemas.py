@@ -12,6 +12,10 @@ class ListCreate(ListBase):
     pass
 
 
+class ListUpdate(ListBase):
+    pass
+
+
 class UserList(ListBase):
     id: int
     owner_id: int

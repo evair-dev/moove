@@ -57,8 +57,40 @@ def commit_change_in_db_user(db: Session, db_user: schemas.User):
 
 
 def create_user_item(db: Session, user_list: schemas.ListCreate, user_id: int):
-    db_item = models.UserList(**user_list.dict(), owner_id=user_id)
-    db.add(db_item)
+    db_list = models.UserList(**user_list.dict(), owner_id=user_id)
+    db.add(db_list)
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    db.refresh(db_list)
+    return db_list
+
+
+def get_list_from_user(db: Session, user_id: int):
+    return get_user(db, user_id).lists
+
+
+def get_a_list_from_user(db: Session, user_id: int, list_id: int):
+    return db.query(models.UserList).filter(models.UserList.id == list_id, models.UserList.owner_id == user_id).first()
+
+
+def get_list(db: Session, list_id: int):
+    return db.query(models.UserList).filter(models.UserList.id == list_id).first()
+
+
+def update_list(db: Session, lists: schemas.ListUpdate, list_id: int):
+    db_list = get_list(db, list_id)
+    user_data = lists.dict(exclude_unset=True)
+    for key, value in user_data.items():
+        setattr(db_list, key, value)
+    db.add(db_list)
+    db.commit()
+    db.refresh(db_list)
+    return db_list
+
+
+def delete_list(db: Session, list_id: int):
+    db_list = get_list(db, list_id)
+    db.delete(db_list)
+    db.commit()
+    db.refresh(db_list)
+    return {"ok": True}
+
